@@ -51,6 +51,13 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
         }
       }
       setProgress(1); setResults(output);
+      if (output.length === 1) {
+        const r = output[0];
+        if (r) {
+          const a = document.createElement("a");
+          a.href = r.url; a.download = r.name; document.body.appendChild(a); a.click(); a.remove();
+        }
+      }
     } catch (e) { output.forEach((r) => URL.revokeObjectURL(r.url)); setError(e instanceof Error ? e.message : "Could not convert this file. Try again."); }
     finally { setBusy(false); }
   }
