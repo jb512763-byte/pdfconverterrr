@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ImageCompressorRouteImport } from './routes/image-compressor'
+import { Route as ImageResizerRouteImport } from './routes/image-resizer'
+import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
+import { Route as JpgToPngRouteImport } from './routes/jpg-to-png'
+import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
+import { Route as PngToJpgRouteImport } from './routes/png-to-jpg'
+import { Route as WebpConverterRouteImport } from './routes/webp-converter'
+import { Route as WebpToJpgRouteImport } from './routes/webp-to-jpg'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImageCompressorRoute = ImageCompressorRouteImport.update({
+  id: '/image-compressor',
+  path: '/image-compressor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImageResizerRoute = ImageResizerRouteImport.update({
+  id: '/image-resizer',
+  path: '/image-resizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JpgToPdfRoute = JpgToPdfRouteImport.update({
+  id: '/jpg-to-pdf',
+  path: '/jpg-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JpgToPngRoute = JpgToPngRouteImport.update({
+  id: '/jpg-to-png',
+  path: '/jpg-to-png',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfToJpgRoute = PdfToJpgRouteImport.update({
+  id: '/pdf-to-jpg',
+  path: '/pdf-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PngToJpgRoute = PngToJpgRouteImport.update({
+  id: '/png-to-jpg',
+  path: '/png-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WebpConverterRoute = WebpConverterRouteImport.update({
+  id: '/webp-converter',
+  path: '/webp-converter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WebpToJpgRoute = WebpToJpgRouteImport.update({
+  id: '/webp-to-jpg',
+  path: '/webp-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/image-compressor': typeof ImageCompressorRoute
+  '/image-resizer': typeof ImageResizerRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/jpg-to-png': typeof JpgToPngRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-jpg': typeof PngToJpgRoute
+  '/webp-converter': typeof WebpConverterRoute
+  '/webp-to-jpg': typeof WebpToJpgRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/image-compressor': typeof ImageCompressorRoute
+  '/image-resizer': typeof ImageResizerRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/jpg-to-png': typeof JpgToPngRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-jpg': typeof PngToJpgRoute
+  '/webp-converter': typeof WebpConverterRoute
+  '/webp-to-jpg': typeof WebpToJpgRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/image-compressor': typeof ImageCompressorRoute
+  '/image-resizer': typeof ImageResizerRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/jpg-to-png': typeof JpgToPngRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-jpg': typeof PngToJpgRoute
+  '/webp-converter': typeof WebpConverterRoute
+  '/webp-to-jpg': typeof WebpToJpgRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/image-compressor'
+    | '/image-resizer'
+    | '/jpg-to-pdf'
+    | '/jpg-to-png'
+    | '/pdf-to-jpg'
+    | '/png-to-jpg'
+    | '/webp-converter'
+    | '/webp-to-jpg'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/image-compressor'
+    | '/image-resizer'
+    | '/jpg-to-pdf'
+    | '/jpg-to-png'
+    | '/pdf-to-jpg'
+    | '/png-to-jpg'
+    | '/webp-converter'
+    | '/webp-to-jpg'
+  id:
+    | '__root__'
+    | '/'
+    | '/image-compressor'
+    | '/image-resizer'
+    | '/jpg-to-pdf'
+    | '/jpg-to-png'
+    | '/pdf-to-jpg'
+    | '/png-to-jpg'
+    | '/webp-converter'
+    | '/webp-to-jpg'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImageCompressorRoute: typeof ImageCompressorRoute
+  ImageResizerRoute: typeof ImageResizerRoute
+  JpgToPdfRoute: typeof JpgToPdfRoute
+  JpgToPngRoute: typeof JpgToPngRoute
+  PdfToJpgRoute: typeof PdfToJpgRoute
+  PngToJpgRoute: typeof PngToJpgRoute
+  WebpConverterRoute: typeof WebpConverterRoute
+  WebpToJpgRoute: typeof WebpToJpgRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/image-compressor': {
+      id: '/image-compressor'
+      path: '/image-compressor'
+      fullPath: '/image-compressor'
+      preLoaderRoute: typeof ImageCompressorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/image-resizer': {
+      id: '/image-resizer'
+      path: '/image-resizer'
+      fullPath: '/image-resizer'
+      preLoaderRoute: typeof ImageResizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jpg-to-pdf': {
+      id: '/jpg-to-pdf'
+      path: '/jpg-to-pdf'
+      fullPath: '/jpg-to-pdf'
+      preLoaderRoute: typeof JpgToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jpg-to-png': {
+      id: '/jpg-to-png'
+      path: '/jpg-to-png'
+      fullPath: '/jpg-to-png'
+      preLoaderRoute: typeof JpgToPngRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdf-to-jpg': {
+      id: '/pdf-to-jpg'
+      path: '/pdf-to-jpg'
+      fullPath: '/pdf-to-jpg'
+      preLoaderRoute: typeof PdfToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/png-to-jpg': {
+      id: '/png-to-jpg'
+      path: '/png-to-jpg'
+      fullPath: '/png-to-jpg'
+      preLoaderRoute: typeof PngToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/webp-converter': {
+      id: '/webp-converter'
+      path: '/webp-converter'
+      fullPath: '/webp-converter'
+      preLoaderRoute: typeof WebpConverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/webp-to-jpg': {
+      id: '/webp-to-jpg'
+      path: '/webp-to-jpg'
+      fullPath: '/webp-to-jpg'
+      preLoaderRoute: typeof WebpToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImageCompressorRoute: ImageCompressorRoute,
+  ImageResizerRoute: ImageResizerRoute,
+  JpgToPdfRoute: JpgToPdfRoute,
+  JpgToPngRoute: JpgToPngRoute,
+  PdfToJpgRoute: PdfToJpgRoute,
+  PngToJpgRoute: PngToJpgRoute,
+  WebpConverterRoute: WebpConverterRoute,
+  WebpToJpgRoute: WebpToJpgRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

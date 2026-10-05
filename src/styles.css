@@ -142,3 +142,25 @@
     color: var(--color-foreground);
   }
 }
+
+/* Converter brand theme: warm paper + ink + signal orange */
+:root {
+  --radius: 0.9rem;
+  --background: oklch(0.975 0.012 85);
+  --foreground: oklch(0.2 0.02 60);
+  --card: oklch(0.995 0.005 85);
+  --card-foreground: oklch(0.2 0.02 60);
+  --primary: oklch(0.64 0.2 40);
+  --primary-foreground: oklch(0.99 0.01 85);
+  --secondary: oklch(0.93 0.025 85);
+  --secondary-foreground: oklch(0.2 0.02 60);
+  --muted: oklch(0.94 0.018 85);
+  --muted-foreground: oklch(0.48 0.03 60);
+  --accent: oklch(0.9 0.08 150);
+  --accent-foreground: oklch(0.25 0.05 150);
+  --border: oklch(0.87 0.025 80);
+  --input: oklch(0.87 0.025 80);
+  --ring: oklch(0.64 0.2 40);
+}
+body { font-family: "DM Sans", system-ui, sans-serif; }
+h1, h2, h3, .font-display { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: -0.02em; }
