@@ -40,7 +40,7 @@ function Index() {
       </section>
       <section className="mx-auto mt-12 grid max-w-6xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4">
         {TOOLS.map((t) => {
-          const Icon = icons[t.kind];
+          const Icon = icons[t.kind] ?? FileImage;
           return (
             <a key={t.slug} href={`/${t.slug}`} className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-primary">
               <Icon className="h-8 w-8 text-primary" />
