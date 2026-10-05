@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FileImage, FileText, Images, Minimize2, Scaling, ShieldCheck, Zap, Lock } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, FileImage, FileText, Images, Minimize2, Scaling } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ToolWorkspace } from "@/components/ToolPage";
 import { SiteShell } from "@/components/SiteShell";
 import { TOOLS } from "@/lib/tools";
 
@@ -26,34 +29,15 @@ export const Route = createFileRoute("/")({
 const icons: Record<string, typeof FileImage> = { "pdf-to-img": FileImage, "img-to-pdf": FileText, convert: Images, compress: Minimize2, resize: Scaling };
 
 function Index() {
-  return (
-    <SiteShell>
-      <section className="mx-auto max-w-5xl px-4 pt-16 text-center">
-        <p className="inline-block rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">Your files never leave your device</p>
-        <h1 className="mt-5 text-5xl font-bold leading-tight md:text-6xl">Every file converter.<br /><span className="text-primary">One free place.</span></h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">PDF to JPG, JPG to PDF, PNG, WebP, compress and resize — instant, private and free. Everything runs right in your browser.</p>
-        <div className="mt-5 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-1"><ShieldCheck className="h-4 w-4 text-primary" /> No upload</span>
-          <span className="inline-flex items-center gap-1"><Zap className="h-4 w-4 text-primary" /> Super fast</span>
-          <span className="inline-flex items-center gap-1"><Lock className="h-4 w-4 text-primary" /> No sign-up</span>
-        </div>
-      </section>
-      <section className="mx-auto mt-12 grid max-w-6xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4">
-        {TOOLS.map((t) => {
-          const Icon = icons[t.kind] ?? FileImage;
-          return (
-            <a key={t.slug} href={`/${t.slug}`} className="group rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-primary">
-              <Icon className="h-8 w-8 text-primary" />
-              <h2 className="mt-4 text-lg font-bold">{t.name}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{t.short}</p>
-            </a>
-          );
-        })}
-      </section>
-      <section className="mx-auto mt-20 max-w-3xl px-4">
-        <h2 className="text-2xl font-bold">Why ConvertKit?</h2>
-        <p className="mt-3 text-muted-foreground">Most online converters upload your documents to their servers. ConvertKit does all the work on your own device, so private files like ID cards, bills and photos stay with you. It is faster too — there is no waiting for uploads or downloads.</p>
-      </section>
-    </SiteShell>
-  );
+  const [slug, setSlug] = useState("jpg-to-pdf");
+  const tool = TOOLS.find((t) => t.slug === slug) ?? TOOLS[0];
+  if (!tool) return null;
+  const ordered = [TOOLS.find((t) => t.slug === "jpg-to-pdf"), ...TOOLS.filter((t) => t.slug !== "jpg-to-pdf")].filter((t) => t !== undefined);
+  return <SiteShell><div className="mx-auto max-w-6xl px-4 py-7 sm:py-12">
+    <div className="mb-7"><p className="mb-2 text-xs font-semibold uppercase text-primary">PDF & IMAGE TOOLS</p><h1 className="font-display text-3xl font-bold sm:text-4xl">Less fuss. More done.</h1></div>
+    <div className="grid gap-6 md:grid-cols-[240px_1fr] lg:gap-10">
+      <nav aria-label="Converter tools" className="grid grid-cols-2 gap-2 md:flex md:flex-col">{ordered.map((t) => { const Icon = icons[t.kind] ?? FileImage; return <Button key={t.slug} variant={slug === t.slug ? "secondary" : "ghost"} aria-pressed={slug === t.slug} onClick={() => setSlug(t.slug)} className={`h-11 min-w-0 justify-start px-3 text-xs sm:text-sm ${slug === t.slug ? "border border-primary/30 text-primary" : "border border-transparent text-muted-foreground"}`}><Icon />{t.kind === "img-to-pdf" ? "Image to PDF" : t.name}</Button>; })}</nav>
+      <section className="min-w-0"><div className="mb-4 flex items-center justify-between gap-3"><div><h2 className="font-display text-2xl font-bold">{tool.kind === "img-to-pdf" ? "Image to PDF" : tool.name}</h2><p className="mt-1 text-sm text-muted-foreground">{tool.short}</p></div><Button asChild variant="ghost" size="icon"><a title="Open tool page" aria-label="Open tool page" href={`/${tool.slug}`}><ArrowRight /></a></Button></div><ToolWorkspace key={tool.slug} tool={tool} /></section>
+    </div>
+  </div></SiteShell>;
 }
