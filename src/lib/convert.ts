@@ -40,7 +40,7 @@ export async function compressImage(file: File, quality: number) {
   return r;
 }
 
-export async function resizeImage(file: File, opts: { width?: number; percent?: number }) {
+export async function resizeImage(file: File, opts: { width?: number | undefined; percent?: number | undefined }) {
   const bmp = await loadBitmap(file);
   let w = bmp.width, h = bmp.height;
   if (opts.percent) { w = Math.round(w * opts.percent / 100); h = Math.round(h * opts.percent / 100); }
