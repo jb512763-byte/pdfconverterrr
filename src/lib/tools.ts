@@ -118,4 +118,14 @@ export const TOOLS: Tool[] = [
   },
 ];
 
-export const getTool = (slug: string) => TOOLS.find((t) => t.slug === slug)!;
+export const getTool = (slug: string) => {
+  const tool = TOOLS.find((t) => t.slug === slug);
+  if (!tool) throw new Error(`Unknown tool: ${slug}`);
+  return tool;
+};
+
+export function fileMime(file: File): string {
+  const extension = file.name.split(".").pop()?.toLowerCase();
+  const known: Record<string, string> = { pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
+  return file.type || known[extension ?? ""] || "";
+}
