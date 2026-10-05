@@ -25,7 +25,7 @@ export function ToolPage({ tool }: { tool: Tool }) {
     const arr = Array.from(list).filter((f) => accepted.includes(f.type));
     if (!arr.length) { setError("Unsupported file type for this tool."); return; }
     setError(""); setResults([]);
-    setFiles((prev) => (multiple ? [...prev, ...arr] : [arr[0]]));
+    setFiles((prev) => (multiple ? [...prev, ...arr] : [arr[0]!]));
   }, [tool.accept, multiple]);
 
   async function run() {
@@ -33,11 +33,11 @@ export function ToolPage({ tool }: { tool: Tool }) {
     try {
       const c = await import("@/lib/convert");
       let out: OutFile[] = [];
-      if (tool.kind === "pdf-to-img") out = await c.pdfToImages(files[0], setProgress);
+      if (tool.kind === "pdf-to-img") out = await c.pdfToImages(files[0]!, setProgress);
       else if (tool.kind === "img-to-pdf") out = [await c.imagesToPdf(files)];
       else {
         for (let i = 0; i < files.length; i++) {
-          const f = files[i];
+          const f = files[i]!;
           if (tool.kind === "convert") out.push(await c.convertImage(f, tool.target!));
           if (tool.kind === "compress") out.push(await c.compressImage(f, quality / 100));
           if (tool.kind === "resize") out.push(await c.resizeImage(f, mode === "width" ? { width: Number(width) || undefined } : { percent: Number(percent) || 100 }));

@@ -81,7 +81,7 @@ export async function imagesToPdf(files: File[]) {
     page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
   }
   const data = await pdf.save();
-  return out(`${base(files[0].name)}.pdf`, new Blob([data as BlobPart], { type: "application/pdf" }));
+  return out(`${base(files[0]!.name)}.pdf`, new Blob([data as BlobPart], { type: "application/pdf" }));
 }
 
 export async function zipAll(files: OutFile[]) {
