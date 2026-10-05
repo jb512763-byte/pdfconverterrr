@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Conversions are client-side only (src/lib/convert.ts, dynamically imported); never add server upload — zero server cost & privacy.
