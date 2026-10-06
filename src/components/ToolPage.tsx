@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Upload, Download, Loader2, ShieldCheck, X, Check, ArrowLeft, FileText, FileImage, Plus, RotateCcw } from "lucide-react";
+import { Upload, Download, Loader2, ShieldCheck, X, Check, ArrowLeft, FileText, FileImage, Plus, RotateCcw, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TOOLS, fileMime, type Tool } from "@/lib/tools";
 import { SiteShell } from "./SiteShell";
@@ -72,6 +72,16 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
     } catch { setError("ZIP download failed. Download the files individually or try again."); }
     finally { setBusy(false); }
   }
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => {
+    if (!results.length || typeof navigator === "undefined" || !navigator.canShare) { setCanShare(false); return; }
+    try { setCanShare(navigator.canShare({ files: results.map((r) => new File([r.blob], r.name, { type: r.blob.type })) })); } catch { setCanShare(false); }
+  }, [results]);
+  async function shareAll() {
+    try {
+      await navigator.share({ files: results.map((r) => new File([r.blob], r.name, { type: r.blob.type })) });
+    } catch (e) { if (!(e instanceof Error && e.name === "AbortError")) setError("Could not open the save menu. Use the Download button instead."); }
+  }
   const fmt = (bytes: number) => bytes < 1048576 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1048576).toFixed(2)} MB`;
   return (
     <div className="workspace rounded-lg border border-border bg-card p-4 sm:p-7">
@@ -92,7 +102,9 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
       </> : <div>
         <div className="mb-5 flex items-center gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"><Check /></div><div><h2 className="font-display text-lg font-bold">Ready to download</h2><p className="text-xs text-muted-foreground">{results.length} {results.length === 1 ? "file" : "files"} · {fmt(results.reduce((n,r) => n+r.blob.size,0))}</p></div></div>
         {results.length > 1 && <Button className="mb-4 h-11 w-full" disabled={busy} onClick={downloadZip}><Download />{busy ? "Preparing ZIP…" : "Download all (ZIP)"}</Button>}
-        {results.length === 1 && results[0] && <Button asChild className="mb-4 h-12 w-full"><a href={results[0].url} download={results[0].name}><Download />Download {results[0].name}</a></Button>}
+        {results.length === 1 && results[0] && <Button asChild className="mb-3 h-12 w-full"><a href={results[0].url} download={results[0].name}><Download />Download {results[0].name}</a></Button>}
+        {canShare && <Button variant="secondary" className="mb-3 h-12 w-full" disabled={busy} onClick={shareAll}><Share2 />{results.every((r) => r.blob.type.startsWith("image/")) ? "Save to Gallery / Share" : "Save to Phone / Share"}</Button>}
+        {results.length === 1 && results[0] && <a href={results[0].url} target="_blank" rel="noopener" className="mb-4 block text-center text-xs text-muted-foreground underline">Download not starting? Open the file</a>}
         <ul className="divide-y divide-border">{results.map((r) => <li key={r.url} className="flex min-w-0 items-center gap-3 py-3">{r.blob.type.startsWith("image/") ? <img src={r.url} alt="Converted page" className="h-12 w-12 shrink-0 rounded border border-border object-contain" /> : <FileText className="h-8 w-8 shrink-0 text-primary" />}<div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{r.name}</p><p className="text-xs text-muted-foreground">{fmt(r.blob.size)}</p></div><Button asChild variant={results.length === 1 ? "default" : "outline"} size="sm"><a href={r.url} download={r.name}><Download /><span>Download</span></a></Button></li>)}</ul>
         <Button variant="ghost" className="mt-4 w-full" disabled={busy} onClick={() => { clearResults(); setFiles([]); setError(""); }}><RotateCcw />Start again</Button>
       </div>}
