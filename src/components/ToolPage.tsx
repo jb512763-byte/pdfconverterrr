@@ -79,7 +79,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
   }, [results]);
   async function shareAll() {
     try {
-      await navigator.share({ files: results.map((r) => new File([r.blob], r.name, { type: r.blob.type })), title: results[0]?.name });
+      await navigator.share({ files: results.map((r) => new File([r.blob], r.name, { type: r.blob.type })) });
     } catch (e) { if (!(e instanceof Error && e.name === "AbortError")) setError("Could not open the save menu. Use the Download button instead."); }
   }
   const fmt = (bytes: number) => bytes < 1048576 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1048576).toFixed(2)} MB`;
