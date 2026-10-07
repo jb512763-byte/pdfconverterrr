@@ -166,3 +166,18 @@
 body { font-family: "DM Sans", system-ui, sans-serif; }
 h1, h2, h3, .font-display { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: 0; }
 .workspace { box-shadow: 0 4px 20px oklch(0.25 0.024 160 / 3%); }
+:root {
+  --primary-glow: oklch(0.58 0.13 170);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-page: radial-gradient(1200px 500px at 50% -10%, oklch(0.93 0.05 163 / 70%), transparent 70%);
+  --shadow-elegant: 0 18px 40px -18px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+body { background-image: var(--gradient-page); background-repeat: no-repeat; -webkit-font-smoothing: antialiased; }
+.workspace { box-shadow: var(--shadow-elegant), 0 1px 2px oklch(0.25 0.024 160 / 6%); animation: rise .35s ease-out both; }
+button, a { transition: transform .12s ease, background-color .2s ease, box-shadow .2s ease, opacity .2s ease; touch-action: manipulation; }
+button:active:not(:disabled), a:active { transform: scale(.97); }
+[data-slot="button"].bg-primary, .bg-primary.inline-flex { background-image: var(--gradient-primary); box-shadow: var(--shadow-elegant); }
+.dropzone:hover { border-color: var(--primary); background-color: var(--secondary); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
