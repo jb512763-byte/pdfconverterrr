@@ -5,6 +5,16 @@ import { TOOLS, fileMime, type Tool } from "@/lib/tools";
 import { SiteShell } from "./SiteShell";
 import type { OutFile } from "@/lib/convert";
 
+function Thumb({ file }: { file: File }) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    if (!fileMime(file).startsWith("image/")) return;
+    const u = URL.createObjectURL(file); setUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file]);
+  return url ? <img src={url} alt="" className="h-12 w-12 shrink-0 rounded border border-border object-cover" /> : <FileText className="h-8 w-8 shrink-0 text-primary" />;
+}
+
 export function ToolWorkspace({ tool }: { tool: Tool }) {
   const [files, setFiles] = useState<File[]>([]);
   const [results, setResults] = useState<OutFile[]>([]);
@@ -88,13 +98,13 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
     <div className="workspace rounded-2xl border border-border bg-card p-4 sm:p-7">
       <input ref={input} aria-label="Choose files" type="file" className="sr-only" accept={tool.accept} multiple={tool.kind !== "pdf-to-img"} disabled={busy} onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
       {results.length === 0 ? <>
-        <div onDragOver={(e) => { e.preventDefault(); if (!busy) setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(e.dataTransfer.files); }} className={`flex min-h-48 flex-col items-center justify-center dropzone cursor-pointer rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors ${drag ? "border-primary bg-secondary" : "border-input bg-background"}`}>
+        <div role="button" tabIndex={0} aria-label="Choose files" onClick={() => { if (!busy) input.current?.click(); }} onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && !busy) { e.preventDefault(); input.current?.click(); } }} onDragOver={(e) => { e.preventDefault(); if (!busy) setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(e.dataTransfer.files); }} className={`flex min-h-48 flex-col items-center justify-center dropzone cursor-pointer rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors ${drag ? "border-primary bg-secondary" : "border-input bg-background"}`}>
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-primary">{tool.kind === "pdf-to-img" ? <FileText size={25} /> : <FileImage size={25} />}</div>
-          <Button size="lg" disabled={busy} onClick={() => input.current?.click()}><Plus />{files.length ? "Add files" : tool.kind === "pdf-to-img" ? "Choose PDF" : "Choose images"}</Button>
-          <p className="mt-3 text-xs text-muted-foreground">{tool.kind === "pdf-to-img" ? "PDF" : tool.accept.split(",").map((m) => m.split("/")[1]?.replace("jpeg", "jpg").toUpperCase()).join(" · ")}</p>
+          <Button size="lg" disabled={busy} onClick={(e) => { e.stopPropagation(); input.current?.click(); }}><Plus />{files.length ? "Add files" : tool.kind === "pdf-to-img" ? "Choose PDF" : "Choose images"}</Button>
+          <p className="mt-3 text-xs text-muted-foreground">Tap anywhere here · {tool.kind === "pdf-to-img" ? "PDF" : tool.accept.split(",").map((m) => m.split("/")[1]?.replace("jpeg", "jpg").toUpperCase()).join(" · ")}</p>
         </div>
         {files.length > 0 && <div className="mt-4">
-          <ul className="max-h-48 overflow-y-auto divide-y divide-border">{files.map((f,i) => <li key={`${f.name}-${i}`} className="flex min-w-0 items-center gap-3 py-2"><FileText className="h-4 w-4 shrink-0 text-muted-foreground" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{f.name}</p><p className="text-xs text-muted-foreground">{fmt(f.size)}</p></div><Button title="Remove file" aria-label={`Remove ${f.name}`} size="icon" variant="ghost" disabled={busy} onClick={() => { clearResults(); setFiles((prev) => prev.filter((_,j) => j !== i)); }}><X /></Button></li>)}</ul>
+          <ul className="max-h-64 overflow-y-auto divide-y divide-border">{files.map((f,i) => <li key={`${f.name}-${i}`} className="flex min-w-0 items-center gap-3 py-2"><Thumb file={f} /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{f.name}</p><p className="text-xs text-muted-foreground">{fmt(f.size)}</p></div><Button title="Remove file" aria-label={`Remove ${f.name}`} size="icon" variant="ghost" disabled={busy} onClick={() => { clearResults(); setFiles((prev) => prev.filter((_,j) => j !== i)); }}><X /></Button></li>)}</ul>
           {tool.kind === "compress" && <label className="mt-4 block text-sm">Quality: {quality}%<input aria-label="Quality" type="range" min={10} max={95} value={quality} disabled={busy} onChange={(e) => setQuality(Number(e.target.value))} className="mt-2 w-full accent-primary" /></label>}
           {tool.kind === "resize" && <div className="mt-4 flex items-center gap-3"><select aria-label="Resize mode" value={mode} disabled={busy} onChange={(e) => { setMode(e.target.value); setValue(e.target.value === "width" ? "800" : "50"); }} className="min-w-0 rounded-md border border-input bg-background p-2 text-sm"><option value="percent">Percentage</option><option value="width">Width (px)</option></select><input aria-label="Resize value" type="number" min="1" value={value} disabled={busy} onChange={(e) => setValue(e.target.value)} className="w-24 rounded-md border border-input bg-background p-2 text-sm" /></div>}
           <Button className="mt-4 h-12 w-full" disabled={busy} onClick={run}>{busy ? <><Loader2 className="animate-spin" />Processing… {Math.round(progress*100)}%</> : <>{action}<Upload /></>}</Button>
