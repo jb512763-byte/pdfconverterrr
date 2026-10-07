@@ -51,6 +51,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
         }
       }
       setProgress(1); setResults(output);
+      void import("@/lib/chime").then((m) => m.playSuccessChime());
       if (output.length === 1) {
         const r = output[0];
         if (r) {
