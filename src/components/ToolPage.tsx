@@ -29,7 +29,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
     setError(accepted.length !== all.length ? "Some unsupported files were skipped." : "");
     const first = accepted[0];
     if (!first) return;
-    setFiles((prev) => tool.kind === "pdf-to-img" ? [first] : [...prev, ...accepted]);
+    void import("@/lib/convert"); setFiles((prev) => tool.kind === "pdf-to-img" ? [first] : [...prev, ...accepted]);
   }
   const action = tool.kind === "img-to-pdf" ? "Create PDF" : tool.kind === "compress" ? "Compress images" : tool.kind === "resize" ? "Resize images" : "Convert";
   async function run() {
@@ -84,10 +84,10 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
   }
   const fmt = (bytes: number) => bytes < 1048576 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1048576).toFixed(2)} MB`;
   return (
-    <div className="workspace rounded-lg border border-border bg-card p-4 sm:p-7">
+    <div className="workspace rounded-2xl border border-border bg-card p-4 sm:p-7">
       <input ref={input} aria-label="Choose files" type="file" className="sr-only" accept={tool.accept} multiple={tool.kind !== "pdf-to-img"} disabled={busy} onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
       {results.length === 0 ? <>
-        <div onDragOver={(e) => { e.preventDefault(); if (!busy) setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(e.dataTransfer.files); }} className={`flex min-h-48 flex-col items-center justify-center rounded-md border border-dashed px-4 py-6 text-center transition-colors ${drag ? "border-primary bg-secondary" : "border-input bg-background"}`}>
+        <div onDragOver={(e) => { e.preventDefault(); if (!busy) setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(e.dataTransfer.files); }} className={`flex min-h-48 flex-col items-center justify-center dropzone cursor-pointer rounded-xl border-2 border-dashed px-4 py-8 text-center transition-colors ${drag ? "border-primary bg-secondary" : "border-input bg-background"}`}>
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-primary">{tool.kind === "pdf-to-img" ? <FileText size={25} /> : <FileImage size={25} />}</div>
           <Button size="lg" disabled={busy} onClick={() => input.current?.click()}><Plus />{files.length ? "Add files" : tool.kind === "pdf-to-img" ? "Choose PDF" : "Choose images"}</Button>
           <p className="mt-3 text-xs text-muted-foreground">{tool.kind === "pdf-to-img" ? "PDF" : tool.accept.split(",").map((m) => m.split("/")[1]?.replace("jpeg", "jpg").toUpperCase()).join(" · ")}</p>
