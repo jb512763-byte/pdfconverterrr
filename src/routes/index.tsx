@@ -33,11 +33,20 @@ function Index() {
   const tool = TOOLS.find((t) => t.slug === slug) ?? TOOLS[0];
   if (!tool) return null;
   const ordered = [TOOLS.find((t) => t.slug === "jpg-to-pdf"), ...TOOLS.filter((t) => t.slug !== "jpg-to-pdf")].filter((t) => t !== undefined);
-  return <SiteShell><div className="mx-auto max-w-6xl px-4 py-7 sm:py-12">
-    <div className="mb-6"><h1 className="font-display text-2xl font-bold sm:text-4xl">PDF & Image Converter</h1></div>
-    <div className="grid gap-6 md:grid-cols-[240px_1fr] lg:gap-10">
-      <nav aria-label="Converter tools" className="order-2 grid grid-cols-2 gap-2 md:order-none md:flex md:flex-col">{ordered.map((t) => { const Icon = icons[t.kind] ?? FileImage; return <Button key={t.slug} variant={slug === t.slug ? "secondary" : "ghost"} aria-pressed={slug === t.slug} onClick={() => setSlug(t.slug)} className={`h-11 min-w-0 justify-start px-3 text-xs sm:text-sm ${slug === t.slug ? "border border-primary/30 text-primary" : "border border-transparent text-muted-foreground"}`}><Icon />{t.kind === "img-to-pdf" ? "Image to PDF" : t.name}</Button>; })}</nav>
-      <section className="min-w-0"><div className="mb-4 flex items-center justify-between gap-3"><div><h2 className="font-display text-2xl font-bold">{tool.kind === "img-to-pdf" ? "Image to PDF" : tool.name}</h2><p className="mt-1 text-sm text-muted-foreground">{tool.short}</p></div><Button asChild variant="ghost" size="icon"><a title="Open tool page" aria-label="Open tool page" href={`/${tool.slug}`}><ArrowRight /></a></Button></div><ToolWorkspace key={tool.slug} tool={tool} /></section>
-    </div>
+  const label = tool.kind === "img-to-pdf" ? "Image to PDF" : tool.name;
+  return <SiteShell><div className="mx-auto max-w-6xl px-4 py-6 sm:py-12">
+    <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">PDF & Image Converter</p>
+    <nav aria-label="Converter tools" className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:px-0">{ordered.map((t) => { const Icon = icons[t.kind] ?? FileImage; const on = slug === t.slug; return <button key={t.slug} type="button" aria-pressed={on} onClick={() => setSlug(t.slug)} className={`flex h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all active:scale-95 ${on ? "border-primary bg-primary text-primary-foreground shadow-md" : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"}`}><Icon className="h-4 w-4" />{t.kind === "img-to-pdf" ? "Image to PDF" : t.name}</button>; })}</nav>
+    <section className="mx-auto max-w-3xl min-w-0">
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div key={tool.slug} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl"><span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">{label}</span></h1>
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">{tool.short}</p>
+          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-secondary px-3 py-1 text-xs font-medium text-primary">● 100% private · Instant · Free</span>
+        </div>
+        <Button asChild variant="ghost" size="icon"><a title="Open tool page" aria-label="Open tool page" href={`/${tool.slug}`}><ArrowRight /></a></Button>
+      </div>
+      <ToolWorkspace key={tool.slug} tool={tool} />
+    </section>
   </div></SiteShell>;
 }
