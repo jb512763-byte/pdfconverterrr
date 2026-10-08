@@ -22,8 +22,14 @@ function out(name: string, blob: Blob): OutFile {
 export async function convertImage(file: File, mime: string, quality = 0.92, width?: number, height?: number) {
   const bmp = await loadBitmap(file);
   const c = document.createElement("canvas");
-  c.width = width ?? bmp.width;
-  c.height = height ?? bmp.height;
+  const w = width ?? bmp.width, h = height ?? bmp.height;
+  if (!Number.isSafeInteger(w) || !Number.isSafeInteger(h) || w <= 0 || h <= 0 || w > 16384 || h > 16384 || w * h > 32000000) {
+    bmp.close();
+    throw new Error("This image is too large to process safely. Choose a smaller image or resize to smaller dimensions (maximum 32 megapixels).");
+  }
+  c.width = w;
+  c.height = h;
+  try {
   const ctx = c.getContext("2d");
   if (!ctx) throw new Error("Not enough memory to process this file. Try a smaller file.");
   if (mime === "image/jpeg") {
@@ -33,9 +39,9 @@ export async function convertImage(file: File, mime: string, quality = 0.92, wid
   ctx.imageSmoothingQuality = "high";
   ctx.drawImage(bmp, 0, 0, c.width, c.height);
   const blob = await canvasToBlob(c, mime, mime === "image/png" ? undefined : quality);
-  bmp.close(); c.width = 0; c.height = 0;
   if (blob.type !== mime) throw new Error("Your browser does not support this output format.");
   return out(`${base(file.name)}.${extFor(mime)}`, blob);
+  } finally { bmp.close(); c.width = 0; c.height = 0; }
 }
 
 export async function compressImage(file: File, quality: number) {
@@ -106,7 +112,16 @@ export async function imagesToPdf(files: File[]) {
 export async function zipAll(files: OutFile[]) {
   const JSZip = (await import("jszip")).default;
   const zip = new JSZip();
-  files.forEach((f) => zip.file(f.name, f.blob));
+  const names = new Set<string>();
+  files.forEach((f) => {
+    let name = f.name, index = 2;
+    while (names.has(name)) {
+      const dot = f.name.lastIndexOf(".");
+      name = dot > 0 ? `${f.name.slice(0, dot)}-${index++}${f.name.slice(dot)}` : `${f.name}-${index++}`;
+    }
+    names.add(name);
+    zip.file(name, f.blob);
+  });
   return await zip.generateAsync({ type: "blob" });
 }
 
