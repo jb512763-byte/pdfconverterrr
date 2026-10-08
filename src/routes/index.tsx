@@ -35,16 +35,18 @@ function Index() {
   const ordered = [TOOLS.find((t) => t.slug === "jpg-to-pdf"), ...TOOLS.filter((t) => t.slug !== "jpg-to-pdf")].filter((t) => t !== undefined);
   const label = tool.kind === "img-to-pdf" ? "Image to PDF" : tool.name;
   return <SiteShell><div className="mx-auto max-w-6xl px-4 py-6 sm:py-12">
-    <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">PDF & Image Converter</p>
-    <nav aria-label="Converter tools" className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:px-0">{ordered.map((t) => { const Icon = icons[t.kind] ?? FileImage; const on = slug === t.slug; return <button key={t.slug} type="button" aria-pressed={on} onClick={() => setSlug(t.slug)} className={`flex h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all active:scale-95 ${on ? "border-primary bg-primary text-primary-foreground shadow-md" : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"}`}><Icon className="h-4 w-4" />{t.kind === "img-to-pdf" ? "Image to PDF" : t.name}</button>; })}</nav>
+    <div className="mb-6 text-center">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-secondary px-3 py-1 text-xs font-semibold text-primary">● Instant · No upload · Free</span>
+      <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">Every PDF & Image tool, <span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">one tap away</span></h1>
+    </div>
+    <nav aria-label="Converter tools" className="mx-auto mb-6 grid max-w-3xl grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">{ordered.map((t) => { const Icon = icons[t.kind] ?? FileImage; const on = slug === t.slug; return <button key={t.slug} type="button" aria-pressed={on} onClick={() => setSlug(t.slug)} className={`flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-2xl border p-3 text-center text-xs font-semibold leading-tight transition-all active:scale-95 sm:text-sm ${on ? "border-primary bg-primary text-primary-foreground shadow-lg" : "border-border bg-card text-foreground shadow-sm hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"}`}><span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${on ? "bg-primary-foreground/20" : "bg-secondary text-primary"}`}><Icon className="h-5 w-5" /></span><span className="w-full break-words">{t.kind === "img-to-pdf" ? "Image to PDF" : t.name}</span></button>; })}</nav>
     <section className="mx-auto max-w-3xl min-w-0">
-      <div className="mb-5 flex items-start justify-between gap-3">
-        <div key={tool.slug} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl"><span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">{label}</span></h1>
-          <p className="mt-2 text-sm text-muted-foreground sm:text-base">{tool.short}</p>
-          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-secondary px-3 py-1 text-xs font-medium text-primary">● 100% private · Instant · Free</span>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div key={tool.slug} className="min-w-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">{label}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{tool.short}</p>
         </div>
-        <Button asChild variant="ghost" size="icon"><a title="Open tool page" aria-label="Open tool page" href={`/${tool.slug}`}><ArrowRight /></a></Button>
+        <Button asChild variant="ghost" size="icon" className="shrink-0"><a title="Open tool page" aria-label="Open tool page" href={`/${tool.slug}`}><ArrowRight /></a></Button>
       </div>
       <ToolWorkspace key={tool.slug} tool={tool} />
     </section>
