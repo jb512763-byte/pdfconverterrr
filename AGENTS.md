@@ -11,3 +11,5 @@
 - Conversions are client-side only (src/lib/convert.ts, dynamically imported); never add server upload — zero server cost & privacy.
 - Keep the PDF.js version browser-compatible and bundle its matching worker locally to avoid unsupported new browser APIs and external worker dependencies.
 - Reuse the same conversion workspace on the home and dedicated tool pages so validation and download behavior remain consistent.
+- Reuse a shared tool selector above both workspaces to keep available formats and selection states consistent.
+- Use a real file input over the selection surface and direct blob download links for gesture-driven browser actions; do not depend exclusively on programmatic clicks.
