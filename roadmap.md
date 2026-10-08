@@ -3,3 +3,5 @@
 - [x] Simplify the home and tool screens for a friendly, compact workflow.
 - [x] Put Image to PDF on the opening screen and verify its downloaded PDF.
 - [x] Check all tool pages, mobile layout and metadata.
+- [ ] Enlarge top tool options and headings; improve the file workspace.
+- [ ] Verify selection, compressor, resizer, PDF generation and direct downloads.

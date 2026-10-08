@@ -173,11 +173,41 @@ h1, h2, h3, .font-display { font-family: "Space Grotesk", system-ui, sans-serif;
   --shadow-elegant: 0 18px 40px -18px color-mix(in oklab, var(--primary) 35%, transparent);
 }
 html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-body { background-image: var(--gradient-page); background-repeat: no-repeat; -webkit-font-smoothing: antialiased; }
+body { -webkit-font-smoothing: antialiased; }
 .workspace { box-shadow: var(--shadow-elegant), 0 1px 2px oklch(0.25 0.024 160 / 6%); animation: rise .35s ease-out both; }
 button, a { transition: transform .12s ease, background-color .2s ease, box-shadow .2s ease, opacity .2s ease; touch-action: manipulation; }
 button:active:not(:disabled), a:active { transform: scale(.97); }
 [data-slot="button"].bg-primary, .bg-primary.inline-flex { background-image: var(--gradient-primary); box-shadow: var(--shadow-elegant); }
 .dropzone:hover { border-color: var(--primary); background-color: var(--secondary); }
+/* Tool colors distinguish file formats without competing with the workspace. */
+:root {
+  --tool-pdf: oklch(0.52 0.17 25);
+  --tool-pdf-surface: oklch(0.96 0.025 25);
+  --tool-image: oklch(0.48 0.15 250);
+  --tool-image-surface: oklch(0.96 0.02 250);
+  --tool-resize: oklch(0.47 0.12 305);
+  --tool-resize-surface: oklch(0.96 0.025 305);
+  --shadow-tool: 0 2px 5px color-mix(in oklab, var(--foreground) 5%, transparent);
+}
+.dark {
+  --tool-pdf: oklch(0.78 0.12 25);
+  --tool-pdf-surface: oklch(0.28 0.045 25);
+  --tool-image: oklch(0.78 0.10 250);
+  --tool-image-surface: oklch(0.28 0.045 250);
+  --tool-resize: oklch(0.78 0.10 305);
+  --tool-resize-surface: oklch(0.28 0.045 305);
+}
+.tool-option { min-width: 0; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow-tool); }
+.tool-option:hover { border-color: var(--primary); background: var(--card); }
+.tool-option-selected { border-color: var(--primary); background: var(--secondary); color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+.tool-symbol { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius); background: var(--secondary); color: var(--primary); }
+.tool-symbol svg { width: 24px; height: 24px; }
+.tool-symbol-img-to-pdf, .tool-symbol-pdf-to-img { color: var(--tool-pdf); background: var(--tool-pdf-surface); }
+.tool-symbol-convert { color: var(--tool-image); background: var(--tool-image-surface); }
+.tool-symbol-resize { color: var(--tool-resize); background: var(--tool-resize-surface); }
+.workspace { border-radius: var(--radius); }
+.dropzone { position: relative; border-radius: var(--radius); }
+.file-picker { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1; }
+.dropzone:focus-within { outline: 2px solid var(--ring); outline-offset: 3px; }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

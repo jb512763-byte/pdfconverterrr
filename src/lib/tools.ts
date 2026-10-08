@@ -127,5 +127,7 @@ export const getTool = (slug: string) => {
 export function fileMime(file: File): string {
   const extension = file.name.split(".").pop()?.toLowerCase();
   const known: Record<string, string> = { pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
-  return file.type || known[extension ?? ""] || "";
+  const type = file.type.toLowerCase();
+  if (type === "image/jpg" || type === "image/pjpeg") return "image/jpeg";
+  return type && type !== "application/octet-stream" ? type : known[extension ?? ""] || "";
 }
