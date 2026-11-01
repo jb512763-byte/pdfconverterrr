@@ -24,6 +24,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
   const [error, setError] = useState("");
   const [drag, setDrag] = useState(false);
   const [quality, setQuality] = useState(70);
+  const [targetKB, setTargetKB] = useState(50);
   const [value, setValue] = useState("50");
   const [mode, setMode] = useState("percent");
   const input = useRef<HTMLInputElement>(null);
@@ -56,7 +57,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
       else {
         for (const [i, f] of files.entries()) {
           if (tool.kind === "convert" && tool.target) output.push(await c.convertImage(f, tool.target));
-          if (tool.kind === "compress") output.push(await c.compressImage(f, quality / 100));
+          if (tool.kind === "compress") output.push(targetKB ? await c.compressToKB(f, targetKB) : await c.compressImage(f, quality / 100));
           if (tool.kind === "resize") output.push(await c.resizeImage(f, mode === "width" ? { width: Number(value) } : { percent: Number(value) }));
           setProgress((i + 1) / files.length);
         }
@@ -109,7 +110,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
         </div>
         {files.length > 0 && <div className="mt-4">
           <ul className="max-h-64 overflow-y-auto divide-y divide-border">{files.map((f,i) => <li key={`${f.name}-${i}`} className="flex min-w-0 items-center gap-3 py-2"><Thumb file={f} /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{f.name}</p><p className="text-xs text-muted-foreground">{fmt(f.size)}</p></div><Button title="Remove file" aria-label={`Remove ${f.name}`} size="icon" variant="ghost" disabled={busy} onClick={() => { clearResults(); setFiles((prev) => prev.filter((_,j) => j !== i)); }}><X /></Button></li>)}</ul>
-          {tool.kind === "compress" && <div className="mt-5"><label className="block text-base font-medium">Quality: {quality}%<input aria-label="Quality" type="range" min={10} max={95} value={quality} disabled={busy} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 h-6 w-full accent-primary" /></label>{files.some((f) => fileMime(f) === "image/png") && <p className="mt-2 text-xs text-muted-foreground">PNG output: WebP when smaller · transparency preserved</p>}</div>}
+          {tool.kind === "compress" && <div className="mt-5"><p className="text-base font-medium">Exam / form photo size</p><div className="mt-2 grid grid-cols-4 gap-2">{[0, 20, 50, 100].map((kb) => <Button key={kb} type="button" variant={targetKB === kb ? "default" : "outline"} className="h-11" disabled={busy} onClick={() => setTargetKB(kb)}>{kb ? `${kb} KB` : "Custom"}</Button>)}</div>{targetKB ? <p className="mt-2 text-xs text-muted-foreground">Output JPG under {targetKB} KB — ready for govt & exam forms</p> : <label className="mt-4 block text-base font-medium">Quality: {quality}%<input aria-label="Quality" type="range" min={10} max={95} value={quality} disabled={busy} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 h-6 w-full accent-primary" /></label>}{!targetKB && files.some((f) => fileMime(f) === "image/png") && <p className="mt-2 text-xs text-muted-foreground">PNG output: WebP when smaller · transparency preserved</p>}</div>}
           {tool.kind === "resize" && <div className="mt-5 flex flex-wrap items-end gap-3"><label className="min-w-0 flex-1 text-sm font-medium">Resize by<select aria-label="Resize mode" value={mode} disabled={busy} onChange={(e) => { setMode(e.target.value); setValue(e.target.value === "width" ? "800" : "50"); }} className="mt-2 h-12 w-full min-w-0 rounded-md border border-input bg-background px-3 text-base"><option value="percent">Percentage</option><option value="width">Width (px)</option></select></label><label className="text-sm font-medium">{mode === "width" ? "Pixels" : "Percent"}<input aria-label="Resize value" type="number" min="1" value={value} disabled={busy} onChange={(e) => setValue(e.target.value)} className="mt-2 block h-12 w-24 rounded-md border border-input bg-background px-3 text-base" /></label></div>}
           <Button className="mt-5 h-14 w-full whitespace-normal text-lg font-semibold" disabled={busy} onClick={run}>{busy ? <><Loader2 className="animate-spin" />Processing… {Math.round(progress*100)}%</> : <>{action}<Upload /></>}</Button>
           {busy && <progress aria-label="Conversion progress" className="mt-2 h-1 w-full accent-primary" value={progress} max={1} />}
