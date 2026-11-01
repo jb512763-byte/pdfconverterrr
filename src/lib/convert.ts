@@ -52,6 +52,26 @@ export async function compressImage(file: File, quality: number) {
   return r;
 }
 
+/** Shrink a photo to JPG under targetKB (for exam / govt form uploads). */
+export async function compressToKB(file: File, targetKB: number) {
+  const limit = targetKB * 1024;
+  const bmp = await loadBitmap(file);
+  let w = bmp.width, h = bmp.height;
+  bmp.close();
+  for (let scale = 1; scale > 0.05; scale *= 0.8) {
+    const sw = Math.max(1, Math.round(w * scale)), sh = Math.max(1, Math.round(h * scale));
+    let lo = 0.1, hi = 0.95, best: Awaited<ReturnType<typeof convertImage>> | null = null;
+    for (let i = 0; i < 7; i++) {
+      const q = (lo + hi) / 2;
+      const r = await convertImage(file, "image/jpeg", q, sw, sh);
+      if (r.blob.size <= limit) { if (best) URL.revokeObjectURL(best.url); best = r; lo = q; }
+      else { URL.revokeObjectURL(r.url); hi = q; }
+    }
+    if (best) return best;
+  }
+  throw new Error(`Could not get this image under ${targetKB} KB.`);
+}
+
 export async function resizeImage(file: File, opts: { width?: number | undefined; percent?: number | undefined }) {
   const bmp = await loadBitmap(file);
   let w = bmp.width, h = bmp.height;
