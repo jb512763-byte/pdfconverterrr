@@ -1,8 +1,8 @@
-import { FileImage, FileText, Images, Minimize2, Scaling, Check } from "lucide-react";
+import { FileImage, FileText, Images, Minimize2, Scaling, Check, Combine, Scissors } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TOOLS, type Tool } from "@/lib/tools";
 
-const icons = { "pdf-to-img": FileImage, "img-to-pdf": FileText, convert: Images, compress: Minimize2, resize: Scaling };
+const icons = { "pdf-to-img": FileImage, "img-to-pdf": FileText, convert: Images, compress: Minimize2, resize: Scaling, merge: Combine, split: Scissors };
 export const toolLabel = (tool: Tool) => tool.kind === "img-to-pdf" ? "Image to PDF" : tool.name;
 export function ToolSelector({ selected, onSelect }: { selected: string; onSelect?: (slug: string) => void }) {
   const ordered = [...TOOLS].sort((a, b) => Number(b.slug === "jpg-to-pdf") - Number(a.slug === "jpg-to-pdf"));

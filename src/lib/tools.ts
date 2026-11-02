@@ -1,4 +1,4 @@
-export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize";
+export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize" | "merge" | "split";
 
 export interface Tool {
   slug: string;
@@ -23,6 +23,28 @@ const freeFaq = {
 };
 
 export const TOOLS: Tool[] = [
+  {
+    slug: "merge-pdf",
+    name: "Merge PDF",
+    short: "Join several PDF files into one, in your order.",
+    title: "Merge PDF – Combine PDF Files Online Free | ConvertKit",
+    description: "Merge multiple PDF files into one document online. Free, no sign-up, no upload – PDFs are combined right in your browser.",
+    kind: "merge",
+    accept: "application/pdf",
+    steps: ["Choose two or more PDF files.", "Move them up or down to set the order.", "Download one merged PDF."],
+    faqs: [privacyFaq, { q: "Can I change the order?", a: "Yes. Use the arrow buttons next to each file before merging." }, freeFaq],
+  },
+  {
+    slug: "split-pdf",
+    name: "Split PDF",
+    short: "Extract pages or split a PDF into separate files.",
+    title: "Split PDF – Extract Pages from PDF Free | ConvertKit",
+    description: "Split a PDF into single pages or extract page ranges like 1-3, 5. Free, private and instant – runs in your browser.",
+    kind: "split",
+    accept: "application/pdf",
+    steps: ["Choose a PDF file.", "Type page ranges, or leave empty to split every page.", "Download the new PDFs."],
+    faqs: [privacyFaq, { q: "How do I extract specific pages?", a: "Type ranges like 1-3, 5. Each range becomes its own PDF file." }, freeFaq],
+  },
   {
     slug: "pdf-to-jpg",
     name: "PDF to JPG",
