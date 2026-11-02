@@ -202,7 +202,7 @@ button:active:not(:disabled), a:active { transform: scale(.97); }
 .tool-option-selected { border-color: var(--primary); background: var(--secondary); color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
 .tool-symbol { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius); background: var(--secondary); color: var(--primary); }
 .tool-symbol svg { width: 24px; height: 24px; }
-.tool-symbol-img-to-pdf, .tool-symbol-pdf-to-img { color: var(--tool-pdf); background: var(--tool-pdf-surface); }
+.tool-symbol-img-to-pdf, .tool-symbol-pdf-to-img, .tool-symbol-merge, .tool-symbol-split { color: var(--tool-pdf); background: var(--tool-pdf-surface); }
 .tool-symbol-convert { color: var(--tool-image); background: var(--tool-image-surface); }
 .tool-symbol-resize { color: var(--tool-resize); background: var(--tool-resize-surface); }
 .workspace { border-radius: var(--radius); }

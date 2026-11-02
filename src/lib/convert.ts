@@ -146,3 +146,54 @@ export async function zipAll(files: OutFile[]) {
 }
 
 export const fmtSize = (b: number) => (b < 1024 ? `${b} B` : b < 1048576 ? `${(b / 1024).toFixed(1)} KB` : `${(b / 1048576).toFixed(2)} MB`);
+
+async function loadPdf(file: File) {
+  const { PDFDocument } = await import("pdf-lib");
+  try { return { PDFDocument, doc: await PDFDocument.load(await file.arrayBuffer()) }; }
+  catch (e) {
+    if (e instanceof Error && /encrypt/i.test(e.message)) throw new Error(`"${file.name}" is password-protected. Choose an unlocked copy.`);
+    throw new Error(`"${file.name}" could not be opened. Check that it is a valid PDF.`);
+  }
+}
+
+export async function mergePdfs(files: File[]) {
+  if (files.length < 2) throw new Error("Choose at least 2 PDF files to merge.");
+  const { PDFDocument } = await import("pdf-lib");
+  const merged = await PDFDocument.create();
+  for (const f of files) {
+    const { doc } = await loadPdf(f);
+    const pages = await merged.copyPages(doc, doc.getPageIndices());
+    pages.forEach((p) => merged.addPage(p));
+  }
+  const data = await merged.save();
+  return out("merged.pdf", new Blob([data as BlobPart], { type: "application/pdf" }));
+}
+
+/** Parses "1-3, 5" into zero-based page indices; throws on invalid input. */
+export function parseRanges(text: string, total: number): number[][] {
+  const groups: number[][] = [];
+  for (const part of text.split(",").map((s) => s.trim()).filter(Boolean)) {
+    const m = /^(\d+)(?:\s*-\s*(\d+))?$/.exec(part);
+    if (!m) throw new Error(`"${part}" is not a valid page range. Use e.g. 1-3, 5`);
+    const a = Number(m[1]), b = Number(m[2] ?? m[1]);
+    if (a < 1 || b < a || b > total) throw new Error(`Pages must be between 1 and ${total}.`);
+    groups.push(Array.from({ length: b - a + 1 }, (_, i) => a - 1 + i));
+  }
+  return groups;
+}
+
+export async function splitPdf(file: File, ranges: string) {
+  const { PDFDocument, doc } = await loadPdf(file);
+  const total = doc.getPageCount();
+  const groups = ranges.trim() ? parseRanges(ranges, total) : doc.getPageIndices().map((i) => [i]);
+  if (!groups.length) throw new Error("Enter pages to extract.");
+  const result: OutFile[] = [];
+  for (const g of groups) {
+    const part = await PDFDocument.create();
+    (await part.copyPages(doc, g)).forEach((p) => part.addPage(p));
+    const first = g[0]! + 1, last = g[g.length - 1]! + 1;
+    const label = first === last ? `page-${first}` : `pages-${first}-${last}`;
+    result.push(out(`${base(file.name)}-${label}.pdf`, new Blob([(await part.save()) as BlobPart], { type: "application/pdf" })));
+  }
+  return result;
+}
