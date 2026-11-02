@@ -14,8 +14,10 @@ import { Route as ImageCompressorRouteImport } from './routes/image-compressor'
 import { Route as ImageResizerRouteImport } from './routes/image-resizer'
 import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
 import { Route as JpgToPngRouteImport } from './routes/jpg-to-png'
+import { Route as MergePdfRouteImport } from './routes/merge-pdf'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as PngToJpgRouteImport } from './routes/png-to-jpg'
+import { Route as SplitPdfRouteImport } from './routes/split-pdf'
 import { Route as WebpConverterRouteImport } from './routes/webp-converter'
 import { Route as WebpToJpgRouteImport } from './routes/webp-to-jpg'
 
@@ -44,6 +46,11 @@ const JpgToPngRoute = JpgToPngRouteImport.update({
   path: '/jpg-to-png',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MergePdfRoute = MergePdfRouteImport.update({
+  id: '/merge-pdf',
+  path: '/merge-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PdfToJpgRoute = PdfToJpgRouteImport.update({
   id: '/pdf-to-jpg',
   path: '/pdf-to-jpg',
@@ -52,6 +59,11 @@ const PdfToJpgRoute = PdfToJpgRouteImport.update({
 const PngToJpgRoute = PngToJpgRouteImport.update({
   id: '/png-to-jpg',
   path: '/png-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplitPdfRoute = SplitPdfRouteImport.update({
+  id: '/split-pdf',
+  path: '/split-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WebpConverterRoute = WebpConverterRouteImport.update({
@@ -71,8 +83,10 @@ export interface FileRoutesByFullPath {
   '/image-resizer': typeof ImageResizerRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/jpg-to-png': typeof JpgToPngRoute
+  '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -82,8 +96,10 @@ export interface FileRoutesByTo {
   '/image-resizer': typeof ImageResizerRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/jpg-to-png': typeof JpgToPngRoute
+  '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -94,8 +110,10 @@ export interface FileRoutesById {
   '/image-resizer': typeof ImageResizerRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/jpg-to-png': typeof JpgToPngRoute
+  '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -107,8 +125,10 @@ export interface FileRouteTypes {
     | '/image-resizer'
     | '/jpg-to-pdf'
     | '/jpg-to-png'
+    | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   fileRoutesByTo: FileRoutesByTo
@@ -118,8 +138,10 @@ export interface FileRouteTypes {
     | '/image-resizer'
     | '/jpg-to-pdf'
     | '/jpg-to-png'
+    | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   id:
@@ -129,8 +151,10 @@ export interface FileRouteTypes {
     | '/image-resizer'
     | '/jpg-to-pdf'
     | '/jpg-to-png'
+    | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   fileRoutesById: FileRoutesById
@@ -141,8 +165,10 @@ export interface RootRouteChildren {
   ImageResizerRoute: typeof ImageResizerRoute
   JpgToPdfRoute: typeof JpgToPdfRoute
   JpgToPngRoute: typeof JpgToPngRoute
+  MergePdfRoute: typeof MergePdfRoute
   PdfToJpgRoute: typeof PdfToJpgRoute
   PngToJpgRoute: typeof PngToJpgRoute
+  SplitPdfRoute: typeof SplitPdfRoute
   WebpConverterRoute: typeof WebpConverterRoute
   WebpToJpgRoute: typeof WebpToJpgRoute
 }
@@ -184,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JpgToPngRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/merge-pdf': {
+      id: '/merge-pdf'
+      path: '/merge-pdf'
+      fullPath: '/merge-pdf'
+      preLoaderRoute: typeof MergePdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pdf-to-jpg': {
       id: '/pdf-to-jpg'
       path: '/pdf-to-jpg'
@@ -196,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/png-to-jpg'
       fullPath: '/png-to-jpg'
       preLoaderRoute: typeof PngToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/split-pdf': {
+      id: '/split-pdf'
+      path: '/split-pdf'
+      fullPath: '/split-pdf'
+      preLoaderRoute: typeof SplitPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/webp-converter': {
@@ -221,8 +261,10 @@ const rootRouteChildren: RootRouteChildren = {
   ImageResizerRoute: ImageResizerRoute,
   JpgToPdfRoute: JpgToPdfRoute,
   JpgToPngRoute: JpgToPngRoute,
+  MergePdfRoute: MergePdfRoute,
   PdfToJpgRoute: PdfToJpgRoute,
   PngToJpgRoute: PngToJpgRoute,
+  SplitPdfRoute: SplitPdfRoute,
   WebpConverterRoute: WebpConverterRoute,
   WebpToJpgRoute: WebpToJpgRoute,
 }
