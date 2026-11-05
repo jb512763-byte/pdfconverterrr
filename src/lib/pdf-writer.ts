@@ -63,7 +63,7 @@ export async function textToPdf(o: TextPdfOptions): Promise<Blob> {
     pages.forEach((p, i) => { const t = `${i + 1} / ${pages.length}`; p.drawText(t, { x: (p.getWidth() - reg!.widthOfTextAtSize(t, 9)) / 2, y: o.margin / 2, size: 9, font: reg!, color: rgb(0.5, 0.5, 0.5) }); });
   }
   doc.setTitle(o.title || "Document"); doc.setProducer("ConvertKit");
-  return new Blob([await doc.save()], { type: "application/pdf" });
+  return new Blob([(await doc.save()) as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
 }
 
 export interface ResumeData { name: string; role: string; email: string; phone: string; location: string; link: string; summary: string; experience: string; education: string; skills: string; extra: string; accent: [number, number, number] }
@@ -93,5 +93,5 @@ export async function resumeToPdf(r: ResumeData): Promise<Blob> {
   section("Profile", r.summary); section("Experience", r.experience); section("Education", r.education);
   section("Skills", r.skills.split(/[,\n]/).map((s) => s.trim()).filter(Boolean).join("  -  ")); section("Projects & Achievements", r.extra);
   doc.setTitle(`${r.name} - Resume`); doc.setProducer("ConvertKit");
-  return new Blob([await doc.save()], { type: "application/pdf" });
+  return new Blob([(await doc.save()) as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
 }
