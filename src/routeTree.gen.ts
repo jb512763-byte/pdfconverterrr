@@ -18,7 +18,9 @@ import { Route as MergePdfRouteImport } from './routes/merge-pdf'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as PngToJpgRouteImport } from './routes/png-to-jpg'
 import { Route as RemoveBackgroundRouteImport } from './routes/remove-background'
+import { Route as ResumeMakerRouteImport } from './routes/resume-maker'
 import { Route as SplitPdfRouteImport } from './routes/split-pdf'
+import { Route as TextToPdfRouteImport } from './routes/text-to-pdf'
 import { Route as WebpConverterRouteImport } from './routes/webp-converter'
 import { Route as WebpToJpgRouteImport } from './routes/webp-to-jpg'
 
@@ -67,9 +69,19 @@ const RemoveBackgroundRoute = RemoveBackgroundRouteImport.update({
   path: '/remove-background',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResumeMakerRoute = ResumeMakerRouteImport.update({
+  id: '/resume-maker',
+  path: '/resume-maker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SplitPdfRoute = SplitPdfRouteImport.update({
   id: '/split-pdf',
   path: '/split-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TextToPdfRoute = TextToPdfRouteImport.update({
+  id: '/text-to-pdf',
+  path: '/text-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WebpConverterRoute = WebpConverterRouteImport.update({
@@ -93,7 +105,9 @@ export interface FileRoutesByFullPath {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/remove-background': typeof RemoveBackgroundRoute
+  '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
+  '/text-to-pdf': typeof TextToPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -107,7 +121,9 @@ export interface FileRoutesByTo {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/remove-background': typeof RemoveBackgroundRoute
+  '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
+  '/text-to-pdf': typeof TextToPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -122,7 +138,9 @@ export interface FileRoutesById {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/remove-background': typeof RemoveBackgroundRoute
+  '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
+  '/text-to-pdf': typeof TextToPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
 }
@@ -138,7 +156,9 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/remove-background'
+    | '/resume-maker'
     | '/split-pdf'
+    | '/text-to-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   fileRoutesByTo: FileRoutesByTo
@@ -152,7 +172,9 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/remove-background'
+    | '/resume-maker'
     | '/split-pdf'
+    | '/text-to-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   id:
@@ -166,7 +188,9 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/remove-background'
+    | '/resume-maker'
     | '/split-pdf'
+    | '/text-to-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
   fileRoutesById: FileRoutesById
@@ -181,7 +205,9 @@ export interface RootRouteChildren {
   PdfToJpgRoute: typeof PdfToJpgRoute
   PngToJpgRoute: typeof PngToJpgRoute
   RemoveBackgroundRoute: typeof RemoveBackgroundRoute
+  ResumeMakerRoute: typeof ResumeMakerRoute
   SplitPdfRoute: typeof SplitPdfRoute
+  TextToPdfRoute: typeof TextToPdfRoute
   WebpConverterRoute: typeof WebpConverterRoute
   WebpToJpgRoute: typeof WebpToJpgRoute
 }
@@ -251,11 +277,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RemoveBackgroundRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resume-maker': {
+      id: '/resume-maker'
+      path: '/resume-maker'
+      fullPath: '/resume-maker'
+      preLoaderRoute: typeof ResumeMakerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/split-pdf': {
       id: '/split-pdf'
       path: '/split-pdf'
       fullPath: '/split-pdf'
       preLoaderRoute: typeof SplitPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/text-to-pdf': {
+      id: '/text-to-pdf'
+      path: '/text-to-pdf'
+      fullPath: '/text-to-pdf'
+      preLoaderRoute: typeof TextToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/webp-converter': {
@@ -285,7 +325,9 @@ const rootRouteChildren: RootRouteChildren = {
   PdfToJpgRoute: PdfToJpgRoute,
   PngToJpgRoute: PngToJpgRoute,
   RemoveBackgroundRoute: RemoveBackgroundRoute,
+  ResumeMakerRoute: ResumeMakerRoute,
   SplitPdfRoute: SplitPdfRoute,
+  TextToPdfRoute: TextToPdfRoute,
   WebpConverterRoute: WebpConverterRoute,
   WebpToJpgRoute: WebpToJpgRoute,
 }
