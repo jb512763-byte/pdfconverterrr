@@ -197,3 +197,30 @@ export async function splitPdf(file: File, ranges: string) {
   }
   return result;
 }
+
+/** Make a light (white/paper) background transparent — ideal for signatures and logos. */
+export async function removeBackground(file: File, strength = 60) {
+  const bmp = await loadBitmap(file);
+  if (bmp.width * bmp.height > 32000000) { bmp.close(); throw new Error("This image is too large. Choose a smaller image."); }
+  const c = document.createElement("canvas");
+  c.width = bmp.width; c.height = bmp.height;
+  const ctx = c.getContext("2d");
+  if (!ctx) { bmp.close(); throw new Error("Not enough memory to process this file."); }
+  ctx.drawImage(bmp, 0, 0); bmp.close();
+  const img = ctx.getImageData(0, 0, c.width, c.height);
+  const d = img.data;
+  // Sample corners to learn the background colour.
+  const pts = [0, c.width - 1, (c.height - 1) * c.width, c.height * c.width - 1];
+  let br = 0, bg = 0, bb = 0;
+  for (const p of pts) { br += d[p * 4]!; bg += d[p * 4 + 1]!; bb += d[p * 4 + 2]!; }
+  br /= 4; bg /= 4; bb /= 4;
+  const hard = 20 + strength * 1.2, soft = hard + 40;
+  for (let i = 0; i < d.length; i += 4) {
+    const dist = Math.hypot(d[i]! - br, d[i + 1]! - bg, d[i + 2]! - bb);
+    if (dist < hard) d[i + 3] = 0;
+    else if (dist < soft) d[i + 3] = Math.round(d[i + 3]! * ((dist - hard) / (soft - hard)));
+  }
+  ctx.putImageData(img, 0, 0);
+  try { return out(`${base(file.name)}-no-bg.png`, await canvasToBlob(c, "image/png")); }
+  finally { c.width = 0; c.height = 0; }
+}

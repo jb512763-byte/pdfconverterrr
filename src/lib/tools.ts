@@ -1,4 +1,4 @@
-export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize" | "merge" | "split";
+export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize" | "merge" | "split" | "bg-remove";
 
 export interface Tool {
   slug: string;
@@ -137,6 +137,17 @@ export const TOOLS: Tool[] = [
     accept: "image/jpeg,image/png,image/webp",
     steps: ["Drop your images.", "Enter a new width (height keeps the ratio) or a percentage.", "Download the resized images."],
     faqs: [privacyFaq, freeFaq],
+  },
+  {
+    slug: "remove-background",
+    name: "Remove Background",
+    short: "Make a white background transparent – perfect for signatures.",
+    title: "Remove Background from Signature & Photo – Free, No Upload | ConvertKit",
+    description: "Remove white background from signature, logo or photo and get a transparent PNG. Free, instant and private – runs in your browser.",
+    kind: "bg-remove",
+    accept: "image/jpeg,image/png,image/webp",
+    steps: ["Choose a signature or photo on a plain background.", "Adjust the strength if needed.", "Download a transparent PNG."],
+    faqs: [privacyFaq, { q: "What images work best?", a: "Signatures, stamps and logos on white or plain paper give the cleanest result." }, freeFaq],
   },
 ];
 
