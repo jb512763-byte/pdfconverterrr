@@ -17,6 +17,7 @@ import { Route as JpgToPngRouteImport } from './routes/jpg-to-png'
 import { Route as MergePdfRouteImport } from './routes/merge-pdf'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as PngToJpgRouteImport } from './routes/png-to-jpg'
+import { Route as RemoveBackgroundRouteImport } from './routes/remove-background'
 import { Route as SplitPdfRouteImport } from './routes/split-pdf'
 import { Route as WebpConverterRouteImport } from './routes/webp-converter'
 import { Route as WebpToJpgRouteImport } from './routes/webp-to-jpg'
@@ -61,6 +62,11 @@ const PngToJpgRoute = PngToJpgRouteImport.update({
   path: '/png-to-jpg',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RemoveBackgroundRoute = RemoveBackgroundRouteImport.update({
+  id: '/remove-background',
+  path: '/remove-background',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SplitPdfRoute = SplitPdfRouteImport.update({
   id: '/split-pdf',
   path: '/split-pdf',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/remove-background': typeof RemoveBackgroundRoute
   '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/remove-background': typeof RemoveBackgroundRoute
   '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
+  '/remove-background': typeof RemoveBackgroundRoute
   '/split-pdf': typeof SplitPdfRoute
   '/webp-converter': typeof WebpConverterRoute
   '/webp-to-jpg': typeof WebpToJpgRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/remove-background'
     | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/remove-background'
     | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/merge-pdf'
     | '/pdf-to-jpg'
     | '/png-to-jpg'
+    | '/remove-background'
     | '/split-pdf'
     | '/webp-converter'
     | '/webp-to-jpg'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   MergePdfRoute: typeof MergePdfRoute
   PdfToJpgRoute: typeof PdfToJpgRoute
   PngToJpgRoute: typeof PngToJpgRoute
+  RemoveBackgroundRoute: typeof RemoveBackgroundRoute
   SplitPdfRoute: typeof SplitPdfRoute
   WebpConverterRoute: typeof WebpConverterRoute
   WebpToJpgRoute: typeof WebpToJpgRoute
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PngToJpgRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/remove-background': {
+      id: '/remove-background'
+      path: '/remove-background'
+      fullPath: '/remove-background'
+      preLoaderRoute: typeof RemoveBackgroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/split-pdf': {
       id: '/split-pdf'
       path: '/split-pdf'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   MergePdfRoute: MergePdfRoute,
   PdfToJpgRoute: PdfToJpgRoute,
   PngToJpgRoute: PngToJpgRoute,
+  RemoveBackgroundRoute: RemoveBackgroundRoute,
   SplitPdfRoute: SplitPdfRoute,
   WebpConverterRoute: WebpConverterRoute,
   WebpToJpgRoute: WebpToJpgRoute,
