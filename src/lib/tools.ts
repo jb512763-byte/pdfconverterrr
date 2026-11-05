@@ -1,4 +1,4 @@
-export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize" | "merge" | "split";
+export type ToolKind = "pdf-to-img" | "img-to-pdf" | "convert" | "compress" | "resize" | "merge" | "split" | "bg-remove";
 
 export interface Tool {
   slug: string;
