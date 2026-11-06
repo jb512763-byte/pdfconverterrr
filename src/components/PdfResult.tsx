@@ -8,6 +8,7 @@ export function PdfResult({ blob, name, onReset }: { blob: Blob; name: string; o
   useEffect(() => {
     const u = URL.createObjectURL(blob); setUrl(u);
     const a = document.createElement("a"); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    void import("@/lib/history").then((h) => h.addHistory([{ name, size: blob.size, tool: "PDF Studio", href: location.pathname }])).catch(() => {});
     void import("@/lib/chime").then((m) => m.playSuccessChime()).catch(() => {});
     return () => URL.revokeObjectURL(u);
   }, [blob, name]);
