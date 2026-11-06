@@ -72,6 +72,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
         }
       }
       setProgress(1); setResults(output);
+      void import("@/lib/history").then((h) => h.addHistory(output.map((o) => ({ name: o.name, size: o.blob.size, tool: toolLabel(tool), href: `/${tool.slug}` })))).catch(() => {});
       void import("@/lib/chime").then((m) => m.playSuccessChime()).catch(() => {});
       if (output.length === 1) {
         const r = output[0];
