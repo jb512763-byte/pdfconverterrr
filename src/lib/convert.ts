@@ -214,11 +214,26 @@ export async function removeBackground(file: File, strength = 60) {
   let br = 0, bg = 0, bb = 0;
   for (const p of pts) { br += d[p * 4]!; bg += d[p * 4 + 1]!; bb += d[p * 4 + 2]!; }
   br /= 4; bg /= 4; bb /= 4;
-  const hard = 20 + strength * 1.2, soft = hard + 40;
-  for (let i = 0; i < d.length; i += 4) {
-    const dist = Math.hypot(d[i]! - br, d[i + 1]! - bg, d[i + 2]! - bb);
-    if (dist < hard) d[i + 3] = 0;
-    else if (dist < soft) d[i + 3] = Math.round(d[i + 3]! * ((dist - hard) / (soft - hard)));
+  // Flood-fill only from the image edges: background connected to the border is removed,
+  // while similar colours inside the subject (skin, clothes, ink) stay untouched.
+  const hard = 15 + strength * 0.6, soft = hard + 25;
+  const W = c.width, H = c.height, seen = new Uint8Array(W * H), stack: number[] = [];
+  const near = (p: number) => Math.hypot(d[p * 4]! - br, d[p * 4 + 1]! - bg, d[p * 4 + 2]! - bb);
+  for (let x = 0; x < W; x++) stack.push(x, (H - 1) * W + x);
+  for (let y = 0; y < H; y++) stack.push(y * W, y * W + W - 1);
+  while (stack.length) {
+    const p = stack.pop()!;
+    if (seen[p]) continue;
+    seen[p] = 1;
+    const dist = near(p);
+    if (dist >= soft) continue;
+    d[p * 4 + 3] = dist < hard ? 0 : Math.round(255 * ((dist - hard) / (soft - hard)));
+    if (dist >= hard) continue;
+    const x = p % W;
+    if (x > 0) stack.push(p - 1);
+    if (x < W - 1) stack.push(p + 1);
+    if (p >= W) stack.push(p - W);
+    if (p < (H - 1) * W) stack.push(p + W);
   }
   ctx.putImageData(img, 0, 0);
   try { return out(`${base(file.name)}-no-bg.png`, await canvasToBlob(c, "image/png")); }
