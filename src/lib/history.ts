@@ -10,7 +10,7 @@ export function readHistory(): HistoryItem[] {
 export function addHistory(items: Omit<HistoryItem, "at">[]) {
   if (typeof window === "undefined" || !items.length) return;
   const now = Date.now();
-  const next = [...items.map((i) => ({ ...i, at: now })), ...readHistory()].slice(0, 8);
+  const next = [...items.map((i) => ({ ...i, at: now })), ...readHistory()].slice(0, 50);
   try { localStorage.setItem(KEY, JSON.stringify(next)); window.dispatchEvent(new Event("ck-history")); } catch { /* storage full/blocked */ }
 }
 

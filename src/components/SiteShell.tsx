@@ -6,6 +6,7 @@ const MENU = [
   { to: "/", label: "All tools" },
   { to: "/text-to-pdf", label: "Text to PDF" },
   { to: "/resume-maker", label: "Resume Maker" },
+  { to: "/profile", label: "My activity" },
   { to: "/about", label: "About us" },
   { to: "/contact", label: "Contact" },
 ] as const;

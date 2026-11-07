@@ -20,6 +20,7 @@ import { Route as MergePdfRouteImport } from './routes/merge-pdf'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as PngToJpgRouteImport } from './routes/png-to-jpg'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RemoveBackgroundRouteImport } from './routes/remove-background'
 import { Route as ResumeMakerRouteImport } from './routes/resume-maker'
 import { Route as SplitPdfRouteImport } from './routes/split-pdf'
@@ -83,6 +84,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RemoveBackgroundRoute = RemoveBackgroundRouteImport.update({
   id: '/remove-background',
   path: '/remove-background',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/remove-background': typeof RemoveBackgroundRoute
   '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/remove-background': typeof RemoveBackgroundRoute
   '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/png-to-jpg': typeof PngToJpgRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/remove-background': typeof RemoveBackgroundRoute
   '/resume-maker': typeof ResumeMakerRoute
   '/split-pdf': typeof SplitPdfRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/privacy'
+    | '/profile'
     | '/remove-background'
     | '/resume-maker'
     | '/split-pdf'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/privacy'
+    | '/profile'
     | '/remove-background'
     | '/resume-maker'
     | '/split-pdf'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/pdf-to-jpg'
     | '/png-to-jpg'
     | '/privacy'
+    | '/profile'
     | '/remove-background'
     | '/resume-maker'
     | '/split-pdf'
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   PdfToJpgRoute: typeof PdfToJpgRoute
   PngToJpgRoute: typeof PngToJpgRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProfileRoute: typeof ProfileRoute
   RemoveBackgroundRoute: typeof RemoveBackgroundRoute
   ResumeMakerRoute: typeof ResumeMakerRoute
   SplitPdfRoute: typeof SplitPdfRoute
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/remove-background': {
       id: '/remove-background'
       path: '/remove-background'
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   PdfToJpgRoute: PdfToJpgRoute,
   PngToJpgRoute: PngToJpgRoute,
   PrivacyRoute: PrivacyRoute,
+  ProfileRoute: ProfileRoute,
   RemoveBackgroundRoute: RemoveBackgroundRoute,
   ResumeMakerRoute: ResumeMakerRoute,
   SplitPdfRoute: SplitPdfRoute,
